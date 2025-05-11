@@ -29,7 +29,7 @@
                         "previewLimit": 50,
                         "server": "localhost",
                         "port": 5432,
-                        "database": "filmhub",
+                        "database": "telconova",
                         "username": "postgres",
                         "password": "root1"
                     }

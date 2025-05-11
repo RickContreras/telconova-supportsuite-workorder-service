@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: telconova-support-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/filmhub
+    username: postgres
+    password: root1
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    # show-sql: true # Descomentar para mostrar las consultas SQL generadas
+    # properties:
+    #   hibernate.format_sql: true # Descomentar para formatear las consultas SQL
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+graphql:
+  servlet:
+    enabled: true
+    mapping: /graphql
