@@ -61,3 +61,85 @@ databaseChangeLog:
               - column: { name: nombre, value: "Finalizada" }
               - column: { name: descripcion, value: "Orden finalizada" }
               - column: { name: es_final, valueBoolean: true }
+
+        - insert:
+            tableName: cliente
+            columns:
+              - column: { name: nombre, value: "Juan Pérez" }
+              - column: { name: email, value: "juan.perez@email.com" }
+              - column: { name: direccion, value: "Calle Falsa 123" }
+              - column: { name: numero_documento, value: "12345678" }
+              - column: { name: telefono, value: "5551234" }
+              - column: { name: fecha_registro, valueDate: "2024-01-01T09:00:00" }
+              - column: { name: tipo_documento_id, valueNumeric: 1 }
+        - insert:
+            tableName: cliente
+            columns:
+              - column: { name: nombre, value: "Ana Gómez" }
+              - column: { name: email, value: "ana.gomez@email.com" }
+              - column: { name: direccion, value: "Av. Siempre Viva 742" }
+              - column: { name: numero_documento, value: "87654321" }
+              - column: { name: telefono, value: "5554321" }
+              - column: { name: fecha_registro, valueDate: "2024-01-02T10:00:00" }
+              - column: { name: tipo_documento_id, valueNumeric: 2 }
+
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-001" }
+              - column: { name: descripcion, value: "Instalación de internet" }
+              - column: { name: tipo_id, valueNumeric: 1 }
+              - column: { name: cliente_id, valueNumeric: 1 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-05T08:00:00" }
+              - column: { name: estado_id, valueNumeric: 1 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-002" }
+              - column: { name: descripcion, value: "Reparación de router" }
+              - column: { name: tipo_id, valueNumeric: 2 }
+              - column: { name: cliente_id, valueNumeric: 2 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-06T09:30:00" }
+              - column: { name: estado_id, valueNumeric: 2 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-003" }
+              - column: { name: descripcion, value: "Cambio de módem" }
+              - column: { name: tipo_id, valueNumeric: 1 }
+              - column: { name: cliente_id, valueNumeric: 1 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-07T11:00:00" }
+              - column: { name: estado_id, valueNumeric: 3 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-004" }
+              - column: { name: descripcion, value: "Actualización de firmware" }
+              - column: { name: tipo_id, valueNumeric: 2 }
+              - column: { name: cliente_id, valueNumeric: 2 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-08T14:30:00" }
+              - column: { name: estado_id, valueNumeric: 1 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-005" }
+              - column: { name: descripcion, value: "Instalación de antena" }
+              - column: { name: tipo_id, valueNumeric: 1 }
+              - column: { name: cliente_id, valueNumeric: 4 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-09T10:15:00" }
+              - column: { name: estado_id, valueNumeric: 2 }
+              - column: { name: usuario_id, valueNumeric: 3 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-006" }
+              - column: { name: descripcion, value: "Reparación de cableado" }
+              - column: { name: tipo_id, valueNumeric: 2 }
+              - column: { name: cliente_id, valueNumeric: 4 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-10T16:45:00" }
+              - column: { name: estado_id, valueNumeric: 3 }
+              - column: { name: usuario_id, valueNumeric: 1 }
