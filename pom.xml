@@ -115,10 +115,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId> <!--Está-->
 		</dependency>
-		<!--<dependency>
+
+		<dependency>
 			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId> 
-		</dependency> -->
+			<artifactId>liquibase-core</artifactId>
+			<version>4.27.0</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId> <!--Está-->

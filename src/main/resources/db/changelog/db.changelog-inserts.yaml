@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: telconova
+      changes:
+        - insert:
+            tableName: tipo_documento
+            columns:
+              - column: { name: nombre, value: "DNI" }
+              - column: { name: descripcion, value: "Documento Nacional de Identidad" }
+        - insert:
+            tableName: tipo_documento
+            columns:
+              - column: { name: nombre, value: "Pasaporte" }
+              - column: { name: descripcion, value: "Pasaporte internacional" }
+
+        - insert:
+            tableName: tipo_orden
+            columns:
+              - column: { name: nombre, value: "Instalación" }
+              - column: { name: descripcion, value: "Instalación de servicio" }
+              - column: { name: duracion_estimada, valueNumeric: 120 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-01T10:00:00" }
+              - column: { name: estado, value: "Activo" }
+              - column: { name: requiere_material, valueBoolean: true }
+        - insert:
+            tableName: tipo_orden
+            columns:
+              - column: { name: nombre, value: "Reparación" }
+              - column: { name: descripcion, value: "Reparación de avería" }
+              - column: { name: duracion_estimada, valueNumeric: 60 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-01T10:00:00" }
+              - column: { name: estado, value: "Activo" }
+              - column: { name: requiere_material, valueBoolean: false }
+
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Abierta" }
+              - column: { name: descripcion, value: "Orden abierta" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "En Proceso" }
+              - column: { name: descripcion, value: "Orden en proceso" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Cerrada" }
+              - column: { name: descripcion, value: "Orden cerrada" }
+
+        - insert:
+            tableName: estado_orden
+            columns:
+              - column: { name: nombre, value: "Pendiente" }
+              - column: { name: descripcion, value: "Pendiente de atención" }
+              - column: { name: es_final, valueBoolean: false }
+        - insert:
+            tableName: estado_orden
+            columns:
+              - column: { name: nombre, value: "Finalizada" }
+              - column: { name: descripcion, value: "Orden finalizada" }
+              - column: { name: es_final, valueBoolean: true }

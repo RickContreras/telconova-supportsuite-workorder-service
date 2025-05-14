@@ -1,0 +1,218 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: telconova
+      changes:
+        - createTable:
+            tableName: tipo_documento
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(255)
+
+        - createTable:
+            tableName: cliente
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: direccion
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: telefono
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: numero_documento
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: fecha_registro
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo_documento_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - addForeignKeyConstraint:
+                  baseTableName: cliente
+                  baseColumnNames: tipo_documento_id
+                  referencedTableName: tipo_documento
+                  referencedColumnNames: id
+
+        - createTable:
+            tableName: tipo_orden
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(255)
+              - column:
+                  name: duracion_estimada
+                  type: INT
+              - column:
+                  name: fecha_creacion
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_modificacion
+                  type: TIMESTAMP
+              - column:
+                  name: fecha_cierre
+                  type: TIMESTAMP
+              - column:
+                  name: fecha_inicio
+                  type: TIMESTAMP
+              - column:
+                  name: estado
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: requiere_material
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: tipo_estado
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(255)
+
+        - createTable:
+            tableName: estado_orden
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(255)
+              - column:
+                  name: es_final
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: orden
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: codigo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo_id
+                  type: BIGINT
+              - column:
+                  name: cliente_id
+                  type: BIGINT
+              - column:
+                  name: fecha_creacion
+                  type: TIMESTAMP
+              - column:
+                  name: fecha_modificacion
+                  type: TIMESTAMP
+              - column:
+                  name: fecha_cierre
+                  type: TIMESTAMP
+              - column:
+                  name: fecha_inicio
+                  type: TIMESTAMP
+              - column:
+                  name: estado_id
+                  type: BIGINT
+              - column:
+                  name: usuario_id
+                  type: BIGINT
+              - addForeignKeyConstraint:
+                  baseTableName: orden
+                  baseColumnNames: tipo_id
+                  referencedTableName: tipo_orden
+                  referencedColumnNames: id
+              - addForeignKeyConstraint:
+                  baseTableName: orden
+                  baseColumnNames: cliente_id
+                  referencedTableName: cliente
+                  referencedColumnNames: id
+              - addForeignKeyConstraint:
+                  baseTableName: orden
+                  baseColumnNames: estado_id
+                  referencedTableName: tipo_estado
+                  referencedColumnNames: id
