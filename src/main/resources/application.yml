@@ -35,3 +35,7 @@ graphql:
   servlet:
     enabled: true
     mapping: /graphql
+
+swagger:
+  production-server-url: ${SWAGGER_PRODUCTION_SERVER_URL}
+  staging-server-url: https://staging-api.example.com
