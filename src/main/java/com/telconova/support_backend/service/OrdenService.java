@@ -1,7 +1,13 @@
 package com.telconova.support_backend.service;
 
 import com.telconova.support_backend.entity.Orden;
+import com.telconova.support_backend.entity.TipoEstado;
+import com.telconova.support_backend.entity.TipoOrden;
+import com.telconova.support_backend.entity.Cliente;
 import com.telconova.support_backend.repository.OrdenRepository;
+import com.telconova.support_backend.repository.TipoEstadoRepository;
+import com.telconova.support_backend.repository.TipoOrdenRepository;
+import com.telconova.support_backend.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +18,15 @@ import java.util.Optional;
 public class OrdenService {
     @Autowired
     private OrdenRepository ordenRepository;
+
+    @Autowired
+    private TipoEstadoRepository tipoEstadoRepository;
+
+    @Autowired
+    private TipoOrdenRepository tipoOrdenRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     public List<Orden> listarOrdenes() {
         return ordenRepository.findAll();
@@ -49,10 +64,11 @@ public class OrdenService {
     }
 
     public Optional<Orden> actualizarEstado(Long id, String nuevoEstado) {
-        return ordenRepository.findById(id).map(orden -> {
-            // Aquí deberías buscar el TipoEstado correspondiente y asignarlo
-            // orden.setEstado(tipoEstado);
-            return ordenRepository.save(orden);
+        return ordenRepository.findById(id).flatMap(orden -> {
+            return tipoEstadoRepository.findByNombre(nuevoEstado).map(tipoEstado -> {
+                orden.setEstado(tipoEstado);
+                return ordenRepository.save(orden);
+            });
         });
     }
 
@@ -83,5 +99,33 @@ public class OrdenService {
         return sb.toString();
     }
 
+    public Orden crearOrdenGraphQL(String codigo, String descripcion, Long tipoId, Long clienteId, Long estadoId) {
+        Orden orden = new Orden();
+        orden.setCodigo(codigo);
+        orden.setDescripcion(descripcion);
+        if (tipoId != null) {
+            tipoOrdenRepository.findById(tipoId).ifPresent(orden::setTipo);
+        }
+        if (clienteId != null) {
+            clienteRepository.findById(clienteId).ifPresent(orden::setCliente);
+        }
+        if (estadoId != null) {
+            tipoEstadoRepository.findById(estadoId).ifPresent(orden::setEstado);
+        }
+        return ordenRepository.save(orden);
+    }
 
+    public Orden actualizarOrdenGraphQL(Long id, String descripcion, Long estadoId) {
+        return ordenRepository.findById(id).map(orden -> {
+            if (descripcion != null) orden.setDescripcion(descripcion);
+            if (estadoId != null) {
+                tipoEstadoRepository.findById(estadoId).ifPresent(orden::setEstado);
+            }
+            return ordenRepository.save(orden);
+        }).orElse(null);
+    }
+
+    public List<Orden> obtenerOrdenesPorUsuarioId(Long usuarioId) {
+        return ordenRepository.findByUsuarioId(usuarioId);
+    }
 }

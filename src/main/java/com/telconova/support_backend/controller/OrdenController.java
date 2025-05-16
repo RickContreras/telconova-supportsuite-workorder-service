@@ -72,5 +72,10 @@ public class OrdenController {
                 .body(csv);
     }
 
+    @GetMapping("/usuario/{usuario_id}")
+    public List<Orden> obtenerOrdenesPorUsuarioId(@PathVariable Long usuario_id) {
+        return ordenService.obtenerOrdenesPorUsuarioId(usuario_id);
+    }
+
     // Métodos para filtro y exportación se pueden agregar aquí
 }

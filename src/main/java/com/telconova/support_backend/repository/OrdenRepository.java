@@ -11,4 +11,5 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     java.util.List<Orden> findByEstado_Nombre(String nombre);
     java.util.List<Orden> findByCliente_Id(Long id);
     java.util.List<Orden> findByTipo_Id(Long id);
+    java.util.List<Orden> findByUsuarioId(Long usuarioId);
 }
