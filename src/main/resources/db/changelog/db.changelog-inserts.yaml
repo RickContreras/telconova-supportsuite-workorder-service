@@ -36,18 +36,28 @@ databaseChangeLog:
         - insert:
             tableName: tipo_estado
             columns:
-              - column: { name: nombre, value: "Abierta" }
-              - column: { name: descripcion, value: "Orden abierta" }
+              - column: { name: nombre, value: "Asignada" }
+              - column: { name: descripcion, value: "Orden asignada" }
         - insert:
             tableName: tipo_estado
             columns:
-              - column: { name: nombre, value: "En Proceso" }
-              - column: { name: descripcion, value: "Orden en proceso" }
+              - column: { name: nombre, value: "En curso" }
+              - column: { name: descripcion, value: "Orden en curso" }
         - insert:
             tableName: tipo_estado
             columns:
-              - column: { name: nombre, value: "Cerrada" }
-              - column: { name: descripcion, value: "Orden cerrada" }
+              - column: { name: nombre, value: "Pausada" }
+              - column: { name: descripcion, value: "Orden pausada" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Finalizada" }
+              - column: { name: descripcion, value: "Orden finalizada" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Requiere aprobacion adicional" }
+              - column: { name: descripcion, value: "Orden finalizada" }
 
         - insert:
             tableName: estado_orden
