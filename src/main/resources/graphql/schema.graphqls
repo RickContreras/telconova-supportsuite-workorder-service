@@ -8,10 +8,24 @@ type Query{
         fechaInicio: String,
         fechaCierre: String
     ): [Orden] 
+    listarMateriales: [Material] # HU-08-Cargar material utilizado punto 1
+}
+
+input RegistrarMaterialOrdenInput {
+    comentario: String!
+    cantidad: Int!
+}
+
+type MaterialOrden {
+    id: ID
+    orden: Orden
+    material: Material
+    cantidad: Int
 }
 
 type Mutation{
     cambiarEstadoOrden(id: ID!, estado: String!): Orden # HU-12-Cambiar estado de una orden (pendiente validar puntos 3 y 4)
+    registrarMaterialOrden(input: RegistrarMaterialOrdenInput!): MaterialOrden 
 }
 
 type Orden {
@@ -46,4 +60,13 @@ type Cliente {
     email: String
     direccion: String
     telefono: String
+}
+
+type Material {
+    id: ID
+    codigo: String
+    nombre: String
+    descripcion: String
+    costo: Float
+    stock: Int
 }

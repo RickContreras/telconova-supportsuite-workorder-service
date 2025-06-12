@@ -216,3 +216,88 @@ databaseChangeLog:
                   baseColumnNames: estado_id
                   referencedTableName: tipo_estado
                   referencedColumnNames: id
+
+  - changeSet:
+      id: 98
+      author: telconova
+      changes:
+        - createTable:
+            tableName: material
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: codigo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(255)
+              - column:
+                  name: costo
+                  type: FLOAT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stock
+                  type: INT
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 99
+      author: telconova
+      changes:
+        - createTable:
+            tableName: material_orden
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: orden_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: material_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cantidad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_uso
+                  type: TIMESTAMP
+              - column:
+                  name: comentarios
+                  type: VARCHAR(255)
+        - addForeignKeyConstraint:
+            baseTableName: material_orden
+            baseColumnNames: orden_id
+            referencedTableName: orden
+            referencedColumnNames: id
+            constraintName: fk_material_orden_orden
+
+        - addForeignKeyConstraint:
+            baseTableName: material_orden
+            baseColumnNames: material_id
+            referencedTableName: material
+            referencedColumnNames: id
+            constraintName: fk_material_orden_material
