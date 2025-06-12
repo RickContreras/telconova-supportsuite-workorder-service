@@ -20,7 +20,7 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()  // Habilitar CORS
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/graphql", "/hola").permitAll()  // Permitir acceso sin autenticación a la raíz, /graphql y /hola
+                .requestMatchers("/", "/graphiql", "/graphql", "/hola").permitAll()  // Permitir acceso sin autenticación a la raíz, /graphql y /hola
                 .anyRequest().authenticated()  
             )
             .httpBasic();  

@@ -1,0 +1,49 @@
+type Query{
+    listarOrdenes: [Orden]
+    obtenerOrdenPorId(id: ID!): Orden
+    obtenerOrdenesPorUsuarioId(usuario_id: ID!): [Orden]
+    filtrarOrdenes( # HU-16-Visualizar estado de ordenes en proceso punto 4
+        estado: String,
+        clienteId: ID,
+        fechaInicio: String,
+        fechaCierre: String
+    ): [Orden] 
+}
+
+type Mutation{
+    cambiarEstadoOrden(id: ID!, estado: String!): Orden # HU-12-Cambiar estado de una orden (pendiente validar puntos 3 y 4)
+}
+
+type Orden {
+    id: ID
+    codigo: String
+    descripcion: String
+    tipo: TipoOrden
+    cliente: Cliente
+    fechaCreacion: String
+    fechaModificacion: String
+    fechaCierre: String
+    fechaInicio: String
+    estado: TipoEstado
+    usuarioId: ID
+}
+
+type TipoEstado {
+    id: ID
+    nombre: String
+    descripcion: String
+}
+
+type TipoOrden {
+    id: ID
+    nombre: String
+    descripcion: String
+}
+
+type Cliente {
+    id: ID
+    nombre: String
+    email: String
+    direccion: String
+    telefono: String
+}

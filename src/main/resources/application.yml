@@ -24,17 +24,20 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+  graphql:
+    servlet:
+      enabled: true
+      mapping: /graphql
+    graphiql:
+      enabled: true
+      path: /graphiql
+
 server:
   port: 8080
 
 logging:
   level:
     org.springframework.security: DEBUG
-
-graphql:
-  servlet:
-    enabled: true
-    mapping: /graphql
 
 swagger:
   production-server-url: ${SWAGGER_PRODUCTION_SERVER_URL}
