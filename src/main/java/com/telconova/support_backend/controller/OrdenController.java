@@ -49,11 +49,14 @@ public class OrdenController {
         }
     }
 
-    @PatchMapping("/{id}/estado")
-    public ResponseEntity<Orden> actualizarEstado(@PathVariable Long id, @RequestBody String nuevoEstado) {
-        return ordenService.actualizarEstado(id, nuevoEstado)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PatchMapping("{id}/estado")
+    public ResponseEntity<?> actualizarEstado(
+            @PathVariable Long id,
+            @RequestBody String nuevoEstado) {
+        // Elimina comillas si vienen en el string (por ejemplo, "\"Finalizada\"")
+        String estadoLimpio = nuevoEstado.replace("\"", "");
+        ordenService.actualizarEstado(id, estadoLimpio);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/filtro")
