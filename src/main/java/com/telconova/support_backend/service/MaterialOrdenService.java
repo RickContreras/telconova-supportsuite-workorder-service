@@ -2,6 +2,7 @@ package com.telconova.support_backend.service;
 
 import com.telconova.support_backend.dto.MaterialOrdenDTO;
 import com.telconova.support_backend.dto.ModificarCantidadMaterialDTO;
+import com.telconova.support_backend.dto.ModificarTipoMaterialDTO;
 import com.telconova.support_backend.entity.MaterialOrden;
 import com.telconova.support_backend.entity.Material;
 import com.telconova.support_backend.entity.Orden;
@@ -30,14 +31,14 @@ public class MaterialOrdenService {
     private HistorialMaterialOrdenRepository historialMaterialOrdenRepository;
 
     public MaterialOrden registrarMaterialOrden(MaterialOrdenDTO input) {
-        // Crear material solo con el nombre
+        // Crear material con el nombre
         Material material = new Material();
         material.setNombre(input.getNombreMaterial());
         material = materialRepository.save(material);
 
-        // Obtener la última orden creada
-        Orden orden = ordenRepository.findTopByOrderByIdDesc()
-            .orElseThrow(() -> new RuntimeException("No hay órdenes registradas"));
+        // Buscar la orden por ID en lugar de la última creada
+        Orden orden = ordenRepository.findById(input.getOrdenId())
+            .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + input.getOrdenId()));
 
         // Crear MaterialOrden
         MaterialOrden materialOrden = new MaterialOrden();
@@ -102,6 +103,80 @@ public class MaterialOrdenService {
         historialMaterialOrdenRepository.save(historial);
 
         return materialOrdenActualizado;
+    }
+
+    @Transactional
+    public MaterialOrden modificarTipoMaterial(ModificarTipoMaterialDTO input) {
+        // Validar justificación obligatoria
+        if (input.getJustificacion() == null || input.getJustificacion().trim().isEmpty()) {
+            throw new RuntimeException("La justificación es obligatoria para modificar el tipo de material");
+        }
+
+        // Buscar el MaterialOrden
+        MaterialOrden materialOrden = materialOrdenRepository.findById(input.getMaterialOrdenId())
+            .orElseThrow(() -> new RuntimeException("Material de orden no encontrado"));
+
+        // Obtener la orden y validar que no esté finalizada
+        Orden orden = materialOrden.getOrden();
+        if (orden.getEstado() != null && "Finalizada".equalsIgnoreCase(orden.getEstado().getNombre())) {
+            throw new RuntimeException("No se puede modificar materiales de una orden finalizada");
+        }
+
+        // Buscar el nuevo material
+        Material nuevoMaterial = materialRepository.findById(input.getNuevoMaterialId())
+            .orElseThrow(() -> new RuntimeException("Material no encontrado"));
+
+        // Obtener el usuario responsable de la orden
+        if (orden.getUsuarioId() == null) {
+            throw new RuntimeException("La orden no tiene un usuario asignado");
+        }
+        String usuarioResponsable = "Usuario-" + orden.getUsuarioId();
+
+        // Guardar el material anterior para el historial
+        Material materialAnterior = materialOrden.getMaterial();
+
+        // Crear registro de historial
+        HistorialMaterialOrden historial = new HistorialMaterialOrden(
+            materialOrden,
+            "material",
+            materialAnterior.getNombre(),
+            nuevoMaterial.getNombre(),
+            input.getJustificacion(),
+            usuarioResponsable
+        );
+
+        // Actualizar el material
+        materialOrden.setMaterial(nuevoMaterial);
+        
+        // Guardar ambos registros
+        MaterialOrden materialOrdenActualizado = materialOrdenRepository.save(materialOrden);
+        historialMaterialOrdenRepository.save(historial);
+
+        return materialOrdenActualizado;
+    }
+
+    @Transactional
+    public boolean eliminarMaterialOrden(Long materialOrdenId) {
+        // Verificar si existe el material orden
+        MaterialOrden materialOrden = materialOrdenRepository.findById(materialOrdenId)
+            .orElseThrow(() -> new RuntimeException("Material de orden no encontrado"));
+
+        // Verificar si la orden no está finalizada
+        Orden orden = materialOrden.getOrden();
+        if (orden.getEstado() != null && "Finalizada".equalsIgnoreCase(orden.getEstado().getNombre())) {
+            throw new RuntimeException("No se puede eliminar materiales de una orden finalizada");
+        }
+
+        // Verificar si hay historiales asociados y eliminarlos primero
+        List<HistorialMaterialOrden> historiales = historialMaterialOrdenRepository
+            .findByMaterialOrdenIdOrderByFechaModificacionDesc(materialOrdenId);
+        if (!historiales.isEmpty()) {
+            historialMaterialOrdenRepository.deleteAll(historiales);
+        }
+
+        // Eliminar el material orden
+        materialOrdenRepository.delete(materialOrden);
+        return true;
     }
 
     public List<HistorialMaterialOrden> obtenerHistorialMaterial(Long materialOrdenId) {

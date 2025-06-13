@@ -7,11 +7,10 @@ type Query{
     listarMateriales: [Material] # HU-08-Cargar material utilizado punto 1
     obtenerMaterialesDeOrden(ordenId: ID!): [MaterialOrden]
     obtenerHistorialMaterial(materialOrdenId: ID!): [HistorialMaterialOrden]
-    # Filtro de las ordenes por usuarioId (Los técnicos)
-    # Crear un Endpoint que permita eliminar la asociación de un material a una orden por id de materialOrden (El avance uno está asociado a la orden 10, lo que busco es eliminar el avance, pero dejar inteacta el material y la orden)
 }
 
 input RegistrarMaterialOrdenInput { # Modificar el input para que en lugar de asignarlo a la última orden creada, se asocie a la orden_id pasada por el endpoint (hacerlo por id de material)
+    ordenId: ID!
     nombreMaterial: String!
     cantidad: Int!
 } 
@@ -19,6 +18,12 @@ input RegistrarMaterialOrdenInput { # Modificar el input para que en lugar de as
 input ModificarCantidadMaterialInput {
     materialOrdenId: ID!
     nuevaCantidad: Int!
+    justificacion: String!
+}
+
+input ModificarTipoMaterialInput {
+    materialOrdenId: ID!
+    nuevoMaterialId: ID!
     justificacion: String!
 }
 
@@ -44,7 +49,8 @@ type Mutation{
     cambiarEstadoOrden(id: ID!, estado: String!): Orden # HU-12-Cambiar estado de una orden (pendiente validar puntos 3 y 4)
     registrarMaterialOrden(input: RegistrarMaterialOrdenInput!): MaterialOrden # HU-08-Cargar material utilizado punto 2 y 3
     modificarCantidadMaterial(input: ModificarCantidadMaterialInput!): MaterialOrden # HU-09-Editar material utilizado
-|   # Crear un Endpoint que similar a modificar cantidad, permita modificar el tipo de material utilzado en la orden (que si dije que voy a usar un cable utp en la orden, y hago la modificación por un cable coaxial, que permita este tipo de modificación)
+    modificarTipoMaterial(input: ModificarTipoMaterialInput!): MaterialOrden # HU-09-Editar material utilizado
+    eliminarMaterialOrden(materialOrdenId: ID!): Boolean # Crear un Endpoint que permita eliminar la asociación de un material a una orden por id de materialOrden (El avance uno está asociado a la orden 10, lo que busco es eliminar el avance, pero dejar inteacta el material y la orden)
 }
 
 type Orden {
