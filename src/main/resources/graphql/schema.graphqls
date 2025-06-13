@@ -2,19 +2,22 @@ type Query{
     listarOrdenes: [Orden]
     obtenerOrdenPorId(id: ID!): Orden
     obtenerOrdenesPorUsuarioId(usuario_id: ID!): [Orden]
-    filtrarOrdenes( 
-        estado: String,
-        clienteId: ID,
-        fechaInicio: String,
-        fechaCierre: String
-    ): [Orden] # HU-16-Visualizar estado de ordenes en proceso punto 4
+    filtrarOrdenes(estado: String, clienteId: ID, fechaInicio: String, fechaCierre: String): [Orden] # HU-16-Visualizar estado de ordenes en proceso punto 4
     listarMateriales: [Material] # HU-08-Cargar material utilizado punto 1
+    obtenerMaterialesDeOrden(ordenId: ID!): [MaterialOrden]
+    obtenerHistorialMaterial(materialOrdenId: ID!): [HistorialMaterialOrden]
 }
 
 input RegistrarMaterialOrdenInput { 
     nombreMaterial: String!
     cantidad: Int!
-} # HU-08-Cargar material utilizado punto 2 y 3
+} 
+
+input ModificarCantidadMaterialInput {
+    materialOrdenId: ID!
+    nuevaCantidad: Int!
+    justificacion: String!
+}
 
 type MaterialOrden {
     id: ID
@@ -23,9 +26,21 @@ type MaterialOrden {
     cantidad: Int
 }
 
+type HistorialMaterialOrden {
+    id: ID
+    materialOrden: MaterialOrden
+    campoModificado: String
+    valorAnterior: String
+    valorNuevo: String
+    justificacion: String
+    usuarioModificacion: String
+    fechaModificacion: String
+}
+
 type Mutation{
     cambiarEstadoOrden(id: ID!, estado: String!): Orden # HU-12-Cambiar estado de una orden (pendiente validar puntos 3 y 4)
-    registrarMaterialOrden(input: RegistrarMaterialOrdenInput!): MaterialOrden
+    registrarMaterialOrden(input: RegistrarMaterialOrdenInput!): MaterialOrden # HU-08-Cargar material utilizado punto 2 y 3
+    modificarCantidadMaterial(input: ModificarCantidadMaterialInput!): MaterialOrden # HU-09-Editar material utilizado
 }
 
 type Orden {
