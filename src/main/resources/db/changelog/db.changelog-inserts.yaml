@@ -96,7 +96,7 @@ databaseChangeLog:
         - insert:
             tableName: orden
             columns:
-              - column: { name: codigo, value: "ORD-001" }
+              - column: { name: codigo, value: "ORD-000001" }
               - column: { name: descripcion, value: "Instalación de internet" }
               - column: { name: tipo_id, valueNumeric: 1 }
               - column: { name: cliente_id, valueNumeric: 1 }
@@ -106,7 +106,7 @@ databaseChangeLog:
         - insert:
             tableName: orden
             columns:
-              - column: { name: codigo, value: "ORD-002" }
+              - column: { name: codigo, value: "ORD-000002" }
               - column: { name: descripcion, value: "Reparación de router" }
               - column: { name: tipo_id, valueNumeric: 2 }
               - column: { name: cliente_id, valueNumeric: 2 }
@@ -116,7 +116,7 @@ databaseChangeLog:
         - insert:
             tableName: orden
             columns:
-              - column: { name: codigo, value: "ORD-003" }
+              - column: { name: codigo, value: "ORD-000003" }
               - column: { name: descripcion, value: "Cambio de módem" }
               - column: { name: tipo_id, valueNumeric: 1 }
               - column: { name: cliente_id, valueNumeric: 1 }
@@ -126,7 +126,7 @@ databaseChangeLog:
         - insert:
             tableName: orden
             columns:
-              - column: { name: codigo, value: "ORD-004" }
+              - column: { name: codigo, value: "ORD-000004" }
               - column: { name: descripcion, value: "Actualización de firmware" }
               - column: { name: tipo_id, valueNumeric: 2 }
               - column: { name: cliente_id, valueNumeric: 2 }
@@ -136,7 +136,7 @@ databaseChangeLog:
         - insert:
             tableName: orden
             columns:
-              - column: { name: codigo, value: "ORD-005" }
+              - column: { name: codigo, value: "ORD-000005" }
               - column: { name: descripcion, value: "Instalación de antena" }
               - column: { name: tipo_id, valueNumeric: 1 }
               - column: { name: cliente_id, valueNumeric: 1 }
@@ -146,7 +146,7 @@ databaseChangeLog:
         - insert:
             tableName: orden
             columns:
-              - column: { name: codigo, value: "ORD-006" }
+              - column: { name: codigo, value: "ORD-000006" }
               - column: { name: descripcion, value: "Reparación de cableado" }
               - column: { name: tipo_id, valueNumeric: 2 }
               - column: { name: cliente_id, valueNumeric: 2 }
@@ -156,7 +156,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 101 }
               - column: { name: codigo, value: "MAT-001" }
               - column: { name: nombre, value: "Cable UTP" }
               - column: { name: descripcion, value: "Cable de red categoría 6" }
@@ -165,7 +164,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 102 }
               - column: { name: codigo, value: "MAT-002" }
               - column: { name: nombre, value: "Router" }
               - column: { name: descripcion, value: "Router inalámbrico" }
@@ -174,7 +172,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 103 }
               - column: { name: codigo, value: "MAT-003" }
               - column: { name: nombre, value: "Conector RJ45" }
               - column: { name: descripcion, value: "Conector para cable de red" }
@@ -183,7 +180,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 104 }
               - column: { name: codigo, value: "MAT-004" }
               - column: { name: nombre, value: "Switch" }
               - column: { name: descripcion, value: "Switch de red 8 puertos" }
@@ -192,7 +188,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 105 }
               - column: { name: codigo, value: "MAT-005" }
               - column: { name: nombre, value: "Antena WiFi" }
               - column: { name: descripcion, value: "Antena para señal inalámbrica" }
@@ -201,7 +196,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 106 }
               - column: { name: codigo, value: "MAT-006" }
               - column: { name: nombre, value: "Fuente de poder" }
               - column: { name: descripcion, value: "Fuente de poder para router" }
@@ -210,7 +204,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 107 }
               - column: { name: codigo, value: "MAT-007" }
               - column: { name: nombre, value: "Patch Panel" }
               - column: { name: descripcion, value: "Patch panel 24 puertos" }
@@ -219,7 +212,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 108 }
               - column: { name: codigo, value: "MAT-008" }
               - column: { name: nombre, value: "Tester de red" }
               - column: { name: descripcion, value: "Herramienta para testeo de red" }
@@ -228,7 +220,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 109 }
               - column: { name: codigo, value: "MAT-009" }
               - column: { name: nombre, value: "Fibra óptica" }
               - column: { name: descripcion, value: "Cable de fibra óptica" }
@@ -237,7 +228,6 @@ databaseChangeLog:
         - insert:
             tableName: material
             columns:
-              - column: { name: id, valueNumeric: 110 }
               - column: { name: codigo, value: "MAT-010" }
               - column: { name: nombre, value: "Caja de herramientas" }
               - column: { name: descripcion, value: "Kit básico para soporte técnico" }
@@ -247,39 +237,39 @@ databaseChangeLog:
             tableName: material_orden
             columns:
               - column: { name: orden_id, valueNumeric: 1 }
-              - column: { name: material_id, valueNumeric: 101 }
+              - column: { name: material_id, valueNumeric: 1 }
               - column: { name: cantidad, valueNumeric: 5 }
               - column: { name: fecha_uso, valueDate: "2025-06-12T10:00:00" }
-              - column: { name: comentarios, value: "Uso inicial de material" }
+              - column: { name: comentario, value: "Uso inicial de material" }
         - insert:
             tableName: material_orden
             columns:
               - column: { name: orden_id, valueNumeric: 2 }
-              - column: { name: material_id, valueNumeric: 102 }
+              - column: { name: material_id, valueNumeric: 2 }
               - column: { name: cantidad, valueNumeric: 2 }
               - column: { name: fecha_uso, valueDate: "2025-06-13T09:30:00" }
-              - column: { name: comentarios, value: "Material de reemplazo" }
+              - column: { name: comentario, value: "Material de reemplazo" }
         - insert:
             tableName: material_orden
             columns:
               - column: { name: orden_id, valueNumeric: 3 }
-              - column: { name: material_id, valueNumeric: 103 }
+              - column: { name: material_id, valueNumeric: 3 }
               - column: { name: cantidad, valueNumeric: 1 }
               - column: { name: fecha_uso, valueDate: "2025-06-14T11:00:00" }
-              - column: { name: comentarios, value: "Material extra" }
+              - column: { name: comentario, value: "Material extra" }
         - insert:
             tableName: material_orden
             columns:
               - column: { name: orden_id, valueNumeric: 4 }
-              - column: { name: material_id, valueNumeric: 104 }
+              - column: { name: material_id, valueNumeric: 4 }
               - column: { name: cantidad, valueNumeric: 3 }
               - column: { name: fecha_uso, valueDate: "2025-06-15T14:30:00" }
-              - column: { name: comentarios, value: "Material para actualización" }
+              - column: { name: comentario, value: "Material para actualización" }
         - insert:
             tableName: material_orden
             columns:
               - column: { name: orden_id, valueNumeric: 5 }
-              - column: { name: material_id, valueNumeric: 105 }
+              - column: { name: material_id, valueNumeric: 5 }
               - column: { name: cantidad, valueNumeric: 4 }
               - column: { name: fecha_uso, valueDate: "2025-06-16T16:45:00" }
-              - column: { name: comentarios, value: "Material para instalación" }
+              - column: { name: comentario, value: "Material para instalación" }

@@ -20,7 +20,7 @@ public class MaterialOrden {
     private Material material;
 
     @Column(nullable = false)
-    private Integer cantidad;
+    private Integer cantidad = 1;
 
     @Column(name = "fecha_uso")
     private LocalDateTime fechaUso;

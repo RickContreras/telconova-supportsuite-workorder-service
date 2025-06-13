@@ -1,6 +1,6 @@
 package com.telconova.support_backend.controller;
 
-import com.telconova.support_backend.dto.RegistrarMaterialOrdenInput;
+import com.telconova.support_backend.dto.MaterialOrdenDTO;
 import com.telconova.support_backend.entity.MaterialOrden;
 import com.telconova.support_backend.service.MaterialOrdenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class MaterialOrdenController {
     private MaterialOrdenService materialOrdenService;
 
     @MutationMapping
-    public MaterialOrden registrarMaterialOrden(@Argument("input") RegistrarMaterialOrdenInput input) {
-        return materialOrdenService.registrarMaterialOrden(input.getComentario(), input.getCantidad());
+    public MaterialOrden registrarMaterialOrden(@Argument("input") MaterialOrdenDTO input) {
+        return materialOrdenService.registrarMaterialOrden(input);
     }
 }

@@ -234,7 +234,7 @@ databaseChangeLog:
                   name: codigo
                   type: VARCHAR(50)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: nombre
                   type: VARCHAR(100)
@@ -247,12 +247,12 @@ databaseChangeLog:
                   name: costo
                   type: FLOAT
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: stock
                   type: INT
                   constraints:
-                    nullable: false
+                    nullable: true
 
   - changeSet:
       id: 99
@@ -286,7 +286,7 @@ databaseChangeLog:
                   name: fecha_uso
                   type: TIMESTAMP
               - column:
-                  name: comentarios
+                  name: comentario
                   type: VARCHAR(255)
         - addForeignKeyConstraint:
             baseTableName: material_orden
@@ -301,3 +301,51 @@ databaseChangeLog:
             referencedTableName: material
             referencedColumnNames: id
             constraintName: fk_material_orden_material
+
+  - changeSet:
+      id: generar_codigo_material
+      author: telconova
+      changes:
+        - sql:
+            splitStatements: false
+            stripComments: true
+            sql: |
+              CREATE OR REPLACE FUNCTION set_material_codigo() RETURNS TRIGGER 
+              AS $$
+              BEGIN
+                IF NEW.codigo IS NULL OR NEW.codigo = '' THEN
+                  NEW.codigo := 'MAT-' || lpad(NEW.id::text, 3, '0');
+                END IF;
+                RETURN NEW;
+              END;
+              $$ LANGUAGE plpgsql;
+
+              DROP TRIGGER IF EXISTS trg_set_material_codigo ON material;
+              CREATE TRIGGER trg_set_material_codigo BEFORE INSERT ON material FOR EACH ROW
+              EXECUTE FUNCTION set_material_codigo();
+
+  - changeSet:
+      id: generar_codigo_orden
+      author: telconova
+      changes:
+        - sql:
+            splitStatements: false
+            stripComments: true
+            sql: |
+              CREATE OR REPLACE FUNCTION set_orden_codigo()
+              RETURNS TRIGGER AS $$
+              BEGIN
+                IF NEW.codigo IS NULL OR NEW.codigo = '' THEN
+                  NEW.codigo := 'ORD-' || lpad(NEW.id::text, 6, '0');
+                END IF;
+                RETURN NEW;
+              END;
+              $$ LANGUAGE plpgsql;
+
+              DROP TRIGGER IF EXISTS trg_set_orden_codigo ON orden;
+              CREATE TRIGGER trg_set_orden_codigo
+              BEFORE INSERT ON orden
+              FOR EACH ROW
+              EXECUTE FUNCTION set_orden_codigo();
+
+ 
