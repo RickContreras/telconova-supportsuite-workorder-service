@@ -1,97 +1,386 @@
-## Documentar las APIs de GraphQL para las ordenes y los materiales utilizados en las ordenes
+# Definición de directivas para documentación
+directive @param(description: String) on ARGUMENT_DEFINITION
+directive @return(description: String) on FIELD_DEFINITION
+
 type Query{
-    listarOrdenes: [Orden]
-    obtenerOrdenPorId(id: ID!): Orden
-    obtenerOrdenesPorUsuarioId(usuario_id: ID!): [Orden]
-    filtrarOrdenes(estado: String, clienteId: ID, fechaInicio: String, fechaCierre: String): [Orden] # HU-16-Visualizar estado de ordenes en proceso punto 4
-    listarMateriales: [Material] # HU-08-Cargar material utilizado punto 1
-    obtenerMaterialesDeOrden(ordenId: ID!): [MaterialOrden]
-    obtenerHistorialMaterial(materialOrdenId: ID!): [HistorialMaterialOrden]
+    """
+    Recupera el listado completo de órdenes de trabajo registradas en el sistema.
+    """
+    listarOrdenes: [Orden] @return(description: "Array de objetos Orden.")
+
+    """
+    Recupera una orden de trabajo específica mediante su identificador único.
+    """
+    obtenerOrdenPorId(
+        id: ID! @param(description: "Identificador único de la orden a consultar.")
+    ): Orden @return(description: "Objeto Orden si existe, null en caso contrario.")
+
+    """
+    Recupera todas las órdenes de trabajo asignadas a un técnico específico.
+    """
+    obtenerOrdenesPorUsuarioId(
+        usuario_id: ID! @param(description: "Identificador único del usuario técnico.")
+    ): [Orden] @return(description: "Array de objetos Orden asignados al usuario.")
+
+    """
+    Permite filtrar órdenes de trabajo según múltiples criterios.
+    """
+    filtrarOrdenes(
+        estado: String @param(description: "Filtrar por estado actual de la orden."), 
+        clienteId: ID @param(description: "Filtrar por cliente asociado."), 
+        fechaInicio: String @param(description: "Filtrar por fecha de inicio (formato ISO)."), 
+        fechaCierre: String @param(description: "Filtrar por fecha de cierre (formato ISO).")
+    ): [Orden] @return(description: "Array de objetos Orden que cumplen con los criterios.")
+
+    """
+    Recupera el catálogo completo de materiales disponibles en el sistema.
+    """
+    listarMateriales: [Material] @return(description: "Array de objetos Material.")
+
+    """
+    Recupera todos los materiales asociados a una orden de trabajo específica.
+    """
+    obtenerMaterialesDeOrden(
+        ordenId: ID! @param(description: "Identificador único de la orden.")
+    ): [MaterialOrden] @return(description: "Array de objetos MaterialOrden asociados a la orden.")
+
+    """
+    Recupera el historial de modificaciones realizadas a un material específico en una orden.
+    """
+    obtenerHistorialMaterial(
+        materialOrdenId: ID! @param(description: "Identificador único del material en la orden.")
+    ): [HistorialMaterialOrden] @return(description: "Array de objetos HistorialMaterialOrden ordenados cronológicamente.")
 }
 
-input RegistrarMaterialOrdenInput { # Modificar el input para que en lugar de asignarlo a la última orden creada, se asocie a la orden_id pasada por el endpoint (hacerlo por id de material)
+"""
+Datos de entrada requeridos para registrar un nuevo material en una orden de trabajo.
+"""
+input RegistrarMaterialOrdenInput { 
+    """
+    Identificador único de la orden de trabajo donde se registrará el material.
+    """
     ordenId: ID!
+    
+    """
+    Nombre del material que se desea registrar en la orden.
+    """
     nombreMaterial: String!
+    
+    """
+    Cantidad de unidades del material a registrar (valor entero positivo).
+    """
     cantidad: Int!
 } 
 
+"""
+Datos de entrada requeridos para modificar la cantidad de un material en una orden existente.
+"""
 input ModificarCantidadMaterialInput {
+    """
+    Identificador único del material en la orden que se desea modificar.
+    """
     materialOrdenId: ID!
+    
+    """
+    Nueva cantidad a establecer para el material (valor entero positivo).
+    """
     nuevaCantidad: Int!
+    
+    """
+    Justificación que explica el motivo del cambio de cantidad.
+    """
     justificacion: String!
 }
 
+"""
+Datos de entrada requeridos para cambiar el tipo de material utilizado en una orden.
+"""
 input ModificarTipoMaterialInput {
+    """
+    Identificador único del material en la orden que se desea cambiar.
+    """
     materialOrdenId: ID!
+    
+    """
+    Identificador único del nuevo material que reemplazará al actual.
+    """
     nuevoMaterialId: ID!
+    
+    """
+    Justificación que explica el motivo del cambio de material.
+    """
     justificacion: String!
 }
 
+"""
+Representa la relación entre un material y una orden de trabajo, incluyendo la cantidad utilizada.
+"""
 type MaterialOrden {
+    """
+    Identificador único de la relación material-orden.
+    """
     id: ID
+    
+    """
+    Referencia a la orden de trabajo a la que pertenece este registro.
+    """
     orden: Orden
+    
+    """
+    Referencia al material utilizado en la orden.
+    """
     material: Material
+    
+    """
+    Cantidad de unidades del material asignadas a la orden.
+    """
     cantidad: Int
 }
 
+"""
+Representa un registro en el historial de modificaciones realizadas a los materiales de una orden.
+"""
 type HistorialMaterialOrden {
+    """
+    Identificador único del registro de historial.
+    """
     id: ID
+    
+    """
+    Referencia al material de la orden que fue modificado.
+    """
     materialOrden: MaterialOrden
+    
+    """
+    Nombre del campo que fue modificado (ej: "cantidad", "material").
+    """
     campoModificado: String
+    
+    """
+    Valor anterior del campo antes de la modificación.
+    """
     valorAnterior: String
+    
+    """
+    Nuevo valor establecido después de la modificación.
+    """
     valorNuevo: String
+    
+    """
+    Justificación proporcionada para explicar el motivo del cambio.
+    """
     justificacion: String
+    
+    """
+    Identificador o nombre del usuario que realizó la modificación.
+    """
     usuarioModificacion: String
+    
+    """
+    Fecha y hora de la modificación
+    """
     fechaModificacion: String
 }
 
 type Mutation{
-    cambiarEstadoOrden(id: ID!, estado: String!): Orden # HU-12-Cambiar estado de una orden (pendiente validar puntos 3 y 4)
-    registrarMaterialOrden(input: RegistrarMaterialOrdenInput!): MaterialOrden # HU-08-Cargar material utilizado punto 2 y 3
-    modificarCantidadMaterial(input: ModificarCantidadMaterialInput!): MaterialOrden # HU-09-Editar material utilizado
-    modificarTipoMaterial(input: ModificarTipoMaterialInput!): MaterialOrden # HU-09-Editar material utilizado
-    eliminarMaterialOrden(materialOrdenId: ID!): Boolean # Crear un Endpoint que permita eliminar la asociación de un material a una orden por id de materialOrden (El avance uno está asociado a la orden 10, lo que busco es eliminar el avance, pero dejar inteacta el material y la orden)
+    """
+    Actualiza el estado de una orden de trabajo existente.
+    """
+    cambiarEstadoOrden(
+        id: ID! @param(description: "Identificador único de la orden a actualizar."),
+        estado: String! @param(description: "Nuevo estado a establecer para la orden.")
+    ): Orden @return(description: "Objeto Orden actualizado.")
+
+    """
+    Registra un nuevo material en una orden de trabajo existente.
+    """
+    registrarMaterialOrden(
+        input: RegistrarMaterialOrdenInput! @param(description: "Objeto con los datos requeridos.")
+    ): MaterialOrden @return(description: "Objeto MaterialOrden creado.")
+
+    """
+    Modifica la cantidad de un material asociado a una orden de trabajo.
+    """
+    modificarCantidadMaterial(
+        input: ModificarCantidadMaterialInput! @param(description: "Objeto con los datos requeridos.")
+    ): MaterialOrden @return(description: "Objeto MaterialOrden actualizado.")
+
+    """
+    Cambia el tipo de material utilizado en una orden de trabajo.
+    """
+    modificarTipoMaterial(
+        input: ModificarTipoMaterialInput! @param(description: "Objeto con los datos requeridos.")
+    ): MaterialOrden @return(description: "Objeto MaterialOrden actualizado.")
+
+    """
+    Elimina un material de una orden de trabajo.
+    """
+    eliminarMaterialOrden(
+        materialOrdenId: ID! @param(description: "Identificador único del material en la orden a eliminar.")
+    ): Boolean @return(description: "Boolean que indica si la eliminación fue exitosa.")
 }
 
+"""
+Representa una orden de trabajo en el sistema de gestión de soporte técnico.
+"""
 type Orden {
+    """
+    Identificador único de la orden de trabajo.
+    """
     id: ID
+    
+    """
+    Código alfanumérico de referencia para identificación rápida de la orden.
+    """
     codigo: String
+    
+    """
+    Descripción detallada del problema reportado o trabajo solicitado.
+    """
     descripcion: String
+    
+    """
+    Clasificación o categoría a la que pertenece la orden.
+    """
     tipo: TipoOrden
+    
+    """
+    Entidad para la cual se realiza el trabajo o servicio.
+    """
     cliente: Cliente
+    
+    """
+    Fecha y hora de creación de la orden
+    """
     fechaCreacion: String
+    
+    """
+    Fecha y hora de la última actualización de la orden 
+    """
     fechaModificacion: String
+    
+    """
+    Fecha y hora en que se completó y cerró la orden 
+    """
     fechaCierre: String
+    
+    """
+    Fecha y hora en que se comenzó a trabajar en la orden 
+    """
     fechaInicio: String
+    
+    """
+    Estado actual en el que se encuentra la orden dentro del flujo de trabajo.
+    """
     estado: TipoEstado
+    
+    """
+    Identificador único del técnico asignado para realizar el trabajo.
+    """
     usuarioId: ID
 }
 
+"""
+Representa un estado posible dentro del ciclo de vida de las órdenes de trabajo.
+"""
 type TipoEstado {
+    """
+    Identificador único del estado.
+    """
     id: ID
+    
+    """
+    Nombre descriptivo del estado (ej: "Pendiente", "En proceso", "Completado").
+    """
     nombre: String
+    
+    """
+    Explicación detallada sobre lo que implica este estado en el flujo de trabajo.
+    """
     descripcion: String
 }
 
+"""
+Representa una clasificación o categoría de órdenes de trabajo.
+"""
 type TipoOrden {
+    """
+    Identificador único del tipo de orden.
+    """
     id: ID
+    
+    """
+    Nombre descriptivo del tipo de orden (ej: "Mantenimiento", "Instalación").
+    """
     nombre: String
+    
+    """
+    Explicación detallada sobre lo que implica este tipo de orden.
+    """
     descripcion: String
 }
 
+"""
+Representa una entidad cliente que solicita servicios técnicos.
+"""
 type Cliente {
+    """
+    Identificador único del cliente en el sistema.
+    """
     id: ID
+    
+    """
+    Nombre completo del cliente (persona o empresa).
+    """
     nombre: String
+    
+    """
+    Dirección de correo electrónico principal de contacto.
+    """
     email: String
+    
+    """
+    Ubicación física donde se realizan los servicios solicitados.
+    """
     direccion: String
+    
+    """
+    Número telefónico de contacto prioritario.
+    """
     telefono: String
 }
 
+"""
+Representa un material, producto o pieza utilizable en órdenes de trabajo.
+"""
 type Material {
+    """
+    Identificador único del material en el sistema.
+    """
     id: ID
+    
+    """
+    Código alfanumérico de referencia para identificación en inventario.
+    """
     codigo: String
+    
+    """
+    Nombre descriptivo del material o producto.
+    """
     nombre: String
+    
+    """
+    Especificaciones técnicas y detalles adicionales del material.
+    """
     descripcion: String
+    
+    """
+    Valor monetario unitario del material.
+    """
     costo: Float
+    
+    """
+    Cantidad de unidades disponibles actualmente en inventario.
+    """
     stock: Int
 }
