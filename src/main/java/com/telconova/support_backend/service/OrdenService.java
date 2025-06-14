@@ -1,9 +1,6 @@
 package com.telconova.support_backend.service;
 
 import com.telconova.support_backend.entity.Orden;
-import com.telconova.support_backend.entity.TipoEstado;
-import com.telconova.support_backend.entity.TipoOrden;
-import com.telconova.support_backend.entity.Cliente;
 import com.telconova.support_backend.repository.OrdenRepository;
 import com.telconova.support_backend.repository.TipoEstadoRepository;
 import com.telconova.support_backend.repository.TipoOrdenRepository;
@@ -89,17 +86,17 @@ public class OrdenService {
         StringBuilder sb = new StringBuilder();
         sb.append("id,codigo,descripcion,estado,cliente,tipo\n");
         for (Orden o : ordenes) {
-            sb.append(o.getId()).append(",")
-              .append(o.getCodigo()).append(",")
-              .append(o.getDescripcion()).append(",")
-              .append(o.getEstado() != null ? o.getEstado().getNombre() : "").append(",")
-              .append(o.getCliente() != null ? o.getCliente().getNombre() : "").append(",")
-              .append(o.getTipo() != null ? o.getTipo().getNombre() : "").append("\n");
+            sb.append(o.getId()).append(",").append(o.getCodigo()).append(",")
+                    .append(o.getDescripcion()).append(",")
+                    .append(o.getEstado() != null ? o.getEstado().getNombre() : "").append(",")
+                    .append(o.getCliente() != null ? o.getCliente().getNombre() : "").append(",")
+                    .append(o.getTipo() != null ? o.getTipo().getNombre() : "").append("\n");
         }
         return sb.toString();
     }
 
-    public Orden crearOrdenGraphQL(String codigo, String descripcion, Long tipoId, Long clienteId, Long estadoId) {
+    public Orden crearOrdenGraphQL(String codigo, String descripcion, Long tipoId, Long clienteId,
+            Long estadoId) {
         Orden orden = new Orden();
         orden.setCodigo(codigo);
         orden.setDescripcion(descripcion);
@@ -117,7 +114,8 @@ public class OrdenService {
 
     public Orden actualizarOrdenGraphQL(Long id, String descripcion, Long estadoId) {
         return ordenRepository.findById(id).map(orden -> {
-            if (descripcion != null) orden.setDescripcion(descripcion);
+            if (descripcion != null)
+                orden.setDescripcion(descripcion);
             if (estadoId != null) {
                 tipoEstadoRepository.findById(estadoId).ifPresent(orden::setEstado);
             }
