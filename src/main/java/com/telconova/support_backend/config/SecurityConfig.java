@@ -9,6 +9,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Configuration  
@@ -20,17 +21,22 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()  // Habilitar CORS
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/graphiql", "/graphql", "/hola").permitAll()  // Permitir acceso sin autenticación a la raíz, /graphql y /hola
-                .anyRequest().authenticated()  
+                .anyRequest().permitAll()  // Permitir acceso sin autenticación a la raíz, /graphql y /hola 
             )
-            .httpBasic();  
+            .httpBasic().disable()  // Deshabilitar autenticación básica
+            .formLogin().disable()  // Deshabilitar autenticación de formulario
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                })
+            );
         return http.build();  
     }  
 
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*")); // Permitir todos los orígenes (puedes restringirlo a dominios específicos)
+        config.setAllowedOriginPatterns(List.of("https://*.github.dev", "*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
