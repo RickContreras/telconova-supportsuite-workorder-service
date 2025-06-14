@@ -49,7 +49,6 @@
     ],
     "remoteUser": "vscode",
     "mounts": [
-        "source=${localWorkspaceFolder}/.m2,target=/home/vscode/.m2,type=bind,consistency=cached",
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
     ],
     "remoteEnv": {
