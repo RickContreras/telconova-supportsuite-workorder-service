@@ -40,3 +40,72 @@ graphql:
 swagger:
   production-server-url: ${SWAGGER_PRODUCTION_SERVER_URL}
   staging-server-url: https://staging-api.example.com
+
+management:
+  server:
+    port: 8080
+  
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health,info,prometheus,metrics
+      cors:
+        allowed-origins: "*"
+        allowed-methods: GET
+        
+  endpoint:
+    health:
+      show-details: when-authorized
+      group:
+        readiness:
+          include: readinessState,db
+        liveness:
+          include: livenessState,diskSpace
+      probes:
+        enabled: true
+    prometheus:
+      access: read-only  
+    metrics:
+      access: read-only  
+      
+  metrics:
+    tags:
+      application: workoder-service
+      service: workoder-service
+      environment: ${spring.profiles.active:default}
+      version: ${info.app.version:1.0.0} 
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+        "[workorder.processing.time]": true
+      slo:
+        "[http.server.requests]": 50ms,100ms,200ms,500ms,1s,2s
+        "[workorder.processing.time]": 100ms,500ms,1s    
+      percentiles:
+        "[http.server.requests]": 0.5,0.95,0.99
+        "[workorder.processing.time]": 0.5,0.9,0.95,0.99
+    enable:
+      jvm: true
+      process: true
+      system: true
+      tomcat: true
+      jdbc: true
+      logback: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+        step: 30s
+        descriptions: true
+  info:
+    java:
+      enabled: true
+    env:
+      enabled: true
+    git:
+      mode: simple
+    build:
+      enabled: true
+    os:
+      enabled: true
