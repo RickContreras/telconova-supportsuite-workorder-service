@@ -44,7 +44,18 @@
         }
     },
     "forwardPorts": [
-        8080, 5432
+        8080,
+        5432
     ],
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "mounts": [
+        "source=${localWorkspaceFolder}/.m2,target=/home/vscode/.m2,type=bind,consistency=cached",
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "remoteEnv": {
+        "TESTCONTAINERS_HOST_OVERRIDE": "host.docker.internal",
+        "DOCKER-HOST": "unix:///var/run/docker.sock",
+        "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE": "/var/run/docker.sock"
+    },
+    "postCreateCommand": "sudo chmod 666 /var/run/docker.sock"
 }
