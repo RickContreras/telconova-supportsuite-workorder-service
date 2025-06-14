@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/ordenes")
@@ -23,8 +22,7 @@ public class OrdenController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Orden> obtenerOrdenPorId(@PathVariable Long id) {
-        return ordenService.obtenerOrdenPorId(id)
-                .map(ResponseEntity::ok)
+        return ordenService.obtenerOrdenPorId(id).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -35,8 +33,7 @@ public class OrdenController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Orden> actualizarOrden(@PathVariable Long id, @RequestBody Orden orden) {
-        return ordenService.actualizarOrden(id, orden)
-                .map(ResponseEntity::ok)
+        return ordenService.actualizarOrden(id, orden).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -50,8 +47,7 @@ public class OrdenController {
     }
 
     @PatchMapping("{id}/estado")
-    public ResponseEntity<?> actualizarEstado(
-            @PathVariable Long id,
+    public ResponseEntity<?> actualizarEstado(@PathVariable Long id,
             @RequestBody String nuevoEstado) {
         // Elimina comillas si vienen en el string (por ejemplo, "\"Finalizada\"")
         String estadoLimpio = nuevoEstado.replace("\"", "");
@@ -61,8 +57,8 @@ public class OrdenController {
 
     @GetMapping("/filtro")
     public List<Orden> filtrarOrdenes(@RequestParam(required = false) String estado,
-                                      @RequestParam(required = false) Long clienteId,
-                                      @RequestParam(required = false) Long tipoId) {
+            @RequestParam(required = false) Long clienteId,
+            @RequestParam(required = false) Long tipoId) {
         return ordenService.filtrarOrdenes(estado, clienteId, tipoId);
     }
 
@@ -70,8 +66,7 @@ public class OrdenController {
     public ResponseEntity<String> exportarOrdenes(@PathVariable String formato) {
         // Por simplicidad, solo exporta CSV como ejemplo
         String csv = ordenService.exportarOrdenesCsv();
-        return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=ordenes.csv")
+        return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=ordenes.csv")
                 .body(csv);
     }
 
