@@ -28,8 +28,9 @@ type Query{
     filtrarOrdenes(
         estado: String @param(description: "Filtrar por estado actual de la orden."), 
         clienteId: ID @param(description: "Filtrar por cliente asociado."), 
-        fechaInicio: String @param(description: "Filtrar por fecha de inicio (formato ISO)."), 
-        fechaCierre: String @param(description: "Filtrar por fecha de cierre (formato ISO).")
+        fechaInicio: String @param(description: "Filtrar por fecha de inicio."), 
+        fechaCierre: String @param(description: "Filtrar por fecha de cierre."),
+        usuarioId: ID @param(description: "Filtrar por técnico asignado.")
     ): [Orden] @return(description: "Array de objetos Orden que cumplen con los criterios.")
 
     """

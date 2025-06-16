@@ -86,7 +86,7 @@ public class OrdenService {
         return sb.toString();
     }
 
-    public List<Orden> filtrarOrdenes(String estado, Long clienteId, String fechaInicio, String fechaCierre) {
+    public List<Orden> filtrarOrdenes(String estado, Long clienteId, String fechaInicio, String fechaCierre, Long usuarioId) {
         List<Orden> ordenes = ordenRepository.findAll();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -108,6 +108,11 @@ public class OrdenService {
         if (fechaCierre != null) {
             ordenes = ordenes.stream()
                 .filter(o -> o.getFechaCierre() != null && o.getFechaCierre().format(formatter).startsWith(fechaCierre))
+                .toList();
+        }
+        if (usuarioId != null) {
+            ordenes = ordenes.stream()
+                .filter(o -> o.getUsuarioId() != null && usuarioId.equals(o.getUsuarioId()))
                 .toList();
         }
         return ordenes;
