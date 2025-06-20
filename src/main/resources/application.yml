@@ -15,6 +15,7 @@ spring:
     # show-sql: true # Descomentar para mostrar las consultas SQL generadas
     # properties:
     #   hibernate.format_sql: true # Descomentar para formatear las consultas SQL
+  
   security:
     user:
       name: ${ADMIN_USER:admin}
@@ -25,17 +26,27 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+  graphql:
+    servlet:
+      enabled: true
+      mapping: /graphql
+    graphiql:
+      enabled: true
+      path: /graphiql
+    schema:
+      locations: classpath:graphql/
+    websocket:
+      path: /graphql
+
 server:
   port: ${PORT:8080}
+  forward-headers-strategy: framework  # Importante para proxies
+  use-forward-headers: true            # Para reconocer headers X-Forwarded-*
 
 logging:
   level:
     org.springframework.security: DEBUG
-
-graphql:
-  servlet:
-    enabled: true
-    mapping: /graphql
+    org.springframework.graphql: DEBUG
 
 swagger:
   production-server-url: ${SWAGGER_PRODUCTION_SERVER_URL}

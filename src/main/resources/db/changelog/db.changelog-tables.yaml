@@ -216,3 +216,188 @@ databaseChangeLog:
                   baseColumnNames: estado_id
                   referencedTableName: tipo_estado
                   referencedColumnNames: id
+
+  - changeSet:
+      id: 98
+      author: telconova
+      changes:
+        - createTable:
+            tableName: material
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: codigo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(255)
+              - column:
+                  name: costo
+                  type: FLOAT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: stock
+                  type: INT
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 99
+      author: telconova
+      changes:
+        - createTable:
+            tableName: material_orden
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: orden_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: material_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cantidad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_uso
+                  type: TIMESTAMP
+              - column:
+                  name: comentario
+                  type: VARCHAR(255)
+        - addForeignKeyConstraint:
+            baseTableName: material_orden
+            baseColumnNames: orden_id
+            referencedTableName: orden
+            referencedColumnNames: id
+            constraintName: fk_material_orden_orden
+
+        - addForeignKeyConstraint:
+            baseTableName: material_orden
+            baseColumnNames: material_id
+            referencedTableName: material
+            referencedColumnNames: id
+            constraintName: fk_material_orden_material
+
+  - changeSet:
+      id: generar_codigo_material
+      author: telconova
+      changes:
+        - sql:
+            splitStatements: false
+            stripComments: true
+            sql: |
+              CREATE OR REPLACE FUNCTION set_material_codigo() RETURNS TRIGGER 
+              AS $$
+              BEGIN
+                IF NEW.codigo IS NULL OR NEW.codigo = '' THEN
+                  NEW.codigo := 'MAT-' || lpad(NEW.id::text, 3, '0');
+                END IF;
+                RETURN NEW;
+              END;
+              $$ LANGUAGE plpgsql;
+
+              DROP TRIGGER IF EXISTS trg_set_material_codigo ON material;
+              CREATE TRIGGER trg_set_material_codigo BEFORE INSERT ON material FOR EACH ROW
+              EXECUTE FUNCTION set_material_codigo();
+
+  - changeSet:
+      id: generar_codigo_orden
+      author: telconova
+      changes:
+        - sql:
+            splitStatements: false
+            stripComments: true
+            sql: |
+              CREATE OR REPLACE FUNCTION set_orden_codigo()
+              RETURNS TRIGGER AS $$
+              BEGIN
+                IF NEW.codigo IS NULL OR NEW.codigo = '' THEN
+                  NEW.codigo := 'ORD-' || lpad(NEW.id::text, 6, '0');
+                END IF;
+                RETURN NEW;
+              END;
+              $$ LANGUAGE plpgsql;
+
+              DROP TRIGGER IF EXISTS trg_set_orden_codigo ON orden;
+              CREATE TRIGGER trg_set_orden_codigo
+              BEFORE INSERT ON orden
+              FOR EACH ROW
+              EXECUTE FUNCTION set_orden_codigo();
+
+  - changeSet:
+      id: crear_historial_material_orden
+      author: telconova
+      changes:
+        - createTable:
+            tableName: historial_material_orden
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: material_orden_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: campo_modificado
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: valor_anterior
+                  type: VARCHAR(255)
+              - column:
+                  name: valor_nuevo
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: justificacion
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: usuario_modificacion
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_modificacion
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: historial_material_orden
+            baseColumnNames: material_orden_id
+            referencedTableName: material_orden
+            referencedColumnNames: id
+            constraintName: fk_historial_material_orden
+
