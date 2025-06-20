@@ -52,10 +52,7 @@ swagger:
   production-server-url: ${SWAGGER_PRODUCTION_SERVER_URL}
   staging-server-url: https://staging-api.example.com
 
-management:
-  server:
-    port: 8080
-  
+management: 
   endpoints:
     web:
       base-path: /actuator
@@ -75,9 +72,15 @@ management:
           include: livenessState,diskSpace
       probes:
         enabled: true
+      rabbit:
+        enabled: false
+      redis:
+        enabled: false
     prometheus:
+      enabled: true
       access: read-only  
     metrics:
+      enabled: true
       access: read-only  
       
   metrics:
