@@ -10,24 +10,43 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: create-drop
+    #hibernate:
+    #  ddl-auto: create-drop
     # show-sql: true # Descomentar para mostrar las consultas SQL generadas
     # properties:
     #   hibernate.format_sql: true # Descomentar para formatear las consultas SQL
+  
   security:
     user:
       name: admin
       password: admin123
+  
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  graphql:
+    servlet:
+      enabled: true
+      mapping: /graphql
+    graphiql:
+      enabled: true
+      path: /graphiql
+    schema:
+      locations: classpath:graphql/
+    websocket:
+      path: /graphql
 
 server:
   port: 8080
+  forward-headers-strategy: framework  # Importante para proxies
+  use-forward-headers: true            # Para reconocer headers X-Forwarded-*
 
 logging:
   level:
     org.springframework.security: DEBUG
+    org.springframework.graphql: DEBUG
 
-graphql:
-  servlet:
-    enabled: true
-    mapping: /graphql
+swagger:
+  production-server-url: ${SWAGGER_PRODUCTION_SERVER_URL}
+  staging-server-url: https://staging-api.example.com

@@ -1,0 +1,275 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: telconova
+      changes:
+        - insert:
+            tableName: tipo_documento
+            columns:
+              - column: { name: nombre, value: "DNI" }
+              - column: { name: descripcion, value: "Documento Nacional de Identidad" }
+        - insert:
+            tableName: tipo_documento
+            columns:
+              - column: { name: nombre, value: "Pasaporte" }
+              - column: { name: descripcion, value: "Pasaporte internacional" }
+
+        - insert:
+            tableName: tipo_orden
+            columns:
+              - column: { name: nombre, value: "Instalación" }
+              - column: { name: descripcion, value: "Instalación de servicio" }
+              - column: { name: duracion_estimada, valueNumeric: 120 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-01T10:00:00" }
+              - column: { name: estado, value: "Activo" }
+              - column: { name: requiere_material, valueBoolean: true }
+        - insert:
+            tableName: tipo_orden
+            columns:
+              - column: { name: nombre, value: "Reparación" }
+              - column: { name: descripcion, value: "Reparación de avería" }
+              - column: { name: duracion_estimada, valueNumeric: 60 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-01T10:00:00" }
+              - column: { name: estado, value: "Activo" }
+              - column: { name: requiere_material, valueBoolean: false }
+
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Asignada" }
+              - column: { name: descripcion, value: "Orden asignada" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "En curso" }
+              - column: { name: descripcion, value: "Orden en curso" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Pausada" }
+              - column: { name: descripcion, value: "Orden pausada" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Finalizada" }
+              - column: { name: descripcion, value: "Orden finalizada" }
+        - insert:
+            tableName: tipo_estado
+            columns:
+              - column: { name: nombre, value: "Requiere aprobacion adicional" }
+              - column: { name: descripcion, value: "Orden finalizada" }
+
+        - insert:
+            tableName: estado_orden
+            columns:
+              - column: { name: nombre, value: "Pendiente" }
+              - column: { name: descripcion, value: "Pendiente de atención" }
+              - column: { name: es_final, valueBoolean: false }
+        - insert:
+            tableName: estado_orden
+            columns:
+              - column: { name: nombre, value: "Finalizada" }
+              - column: { name: descripcion, value: "Orden finalizada" }
+              - column: { name: es_final, valueBoolean: true }
+
+        - insert:
+            tableName: cliente
+            columns:
+              - column: { name: nombre, value: "Juan Pérez" }
+              - column: { name: email, value: "juan.perez@email.com" }
+              - column: { name: direccion, value: "Calle Falsa 123" }
+              - column: { name: numero_documento, value: "12345678" }
+              - column: { name: telefono, value: "5551234" }
+              - column: { name: fecha_registro, valueDate: "2024-01-01T09:00:00" }
+              - column: { name: tipo_documento_id, valueNumeric: 1 }
+        - insert:
+            tableName: cliente
+            columns:
+              - column: { name: nombre, value: "Ana Gómez" }
+              - column: { name: email, value: "ana.gomez@email.com" }
+              - column: { name: direccion, value: "Av. Siempre Viva 742" }
+              - column: { name: numero_documento, value: "87654321" }
+              - column: { name: telefono, value: "5554321" }
+              - column: { name: fecha_registro, valueDate: "2024-01-02T10:00:00" }
+              - column: { name: tipo_documento_id, valueNumeric: 2 }
+
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-000001" }
+              - column: { name: descripcion, value: "Instalación de internet" }
+              - column: { name: tipo_id, valueNumeric: 1 }
+              - column: { name: cliente_id, valueNumeric: 1 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-05T08:00:00" }
+              - column: { name: estado_id, valueNumeric: 1 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-000002" }
+              - column: { name: descripcion, value: "Reparación de router" }
+              - column: { name: tipo_id, valueNumeric: 2 }
+              - column: { name: cliente_id, valueNumeric: 2 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-06T09:30:00" }
+              - column: { name: estado_id, valueNumeric: 2 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-000003" }
+              - column: { name: descripcion, value: "Cambio de módem" }
+              - column: { name: tipo_id, valueNumeric: 1 }
+              - column: { name: cliente_id, valueNumeric: 1 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-07T11:00:00" }
+              - column: { name: estado_id, valueNumeric: 3 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-000004" }
+              - column: { name: descripcion, value: "Actualización de firmware" }
+              - column: { name: tipo_id, valueNumeric: 2 }
+              - column: { name: cliente_id, valueNumeric: 2 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-08T14:30:00" }
+              - column: { name: estado_id, valueNumeric: 1 }
+              - column: { name: usuario_id, valueNumeric: 2 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-000005" }
+              - column: { name: descripcion, value: "Instalación de antena" }
+              - column: { name: tipo_id, valueNumeric: 1 }
+              - column: { name: cliente_id, valueNumeric: 1 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-09T10:15:00" }
+              - column: { name: estado_id, valueNumeric: 2 }
+              - column: { name: usuario_id, valueNumeric: 4 }
+        - insert:
+            tableName: orden
+            columns:
+              - column: { name: codigo, value: "ORD-000006" }
+              - column: { name: descripcion, value: "Reparación de cableado" }
+              - column: { name: tipo_id, valueNumeric: 2 }
+              - column: { name: cliente_id, valueNumeric: 2 }
+              - column: { name: fecha_creacion, valueDate: "2024-01-10T16:45:00" }
+              - column: { name: estado_id, valueNumeric: 3 }
+              - column: { name: usuario_id, valueNumeric: 4 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-001" }
+              - column: { name: nombre, value: "Cable UTP" }
+              - column: { name: descripcion, value: "Cable de red categoría 6" }
+              - column: { name: costo, valueNumeric: 10.5 }
+              - column: { name: stock, valueNumeric: 100 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-002" }
+              - column: { name: nombre, value: "Router" }
+              - column: { name: descripcion, value: "Router inalámbrico" }
+              - column: { name: costo, valueNumeric: 55.0 }
+              - column: { name: stock, valueNumeric: 20 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-003" }
+              - column: { name: nombre, value: "Conector RJ45" }
+              - column: { name: descripcion, value: "Conector para cable de red" }
+              - column: { name: costo, valueNumeric: 1.2 }
+              - column: { name: stock, valueNumeric: 500 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-004" }
+              - column: { name: nombre, value: "Switch" }
+              - column: { name: descripcion, value: "Switch de red 8 puertos" }
+              - column: { name: costo, valueNumeric: 35.0 }
+              - column: { name: stock, valueNumeric: 15 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-005" }
+              - column: { name: nombre, value: "Antena WiFi" }
+              - column: { name: descripcion, value: "Antena para señal inalámbrica" }
+              - column: { name: costo, valueNumeric: 18.0 }
+              - column: { name: stock, valueNumeric: 30 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-006" }
+              - column: { name: nombre, value: "Fuente de poder" }
+              - column: { name: descripcion, value: "Fuente de poder para router" }
+              - column: { name: costo, valueNumeric: 8.5 }
+              - column: { name: stock, valueNumeric: 40 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-007" }
+              - column: { name: nombre, value: "Patch Panel" }
+              - column: { name: descripcion, value: "Patch panel 24 puertos" }
+              - column: { name: costo, valueNumeric: 60.0 }
+              - column: { name: stock, valueNumeric: 10 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-008" }
+              - column: { name: nombre, value: "Tester de red" }
+              - column: { name: descripcion, value: "Herramienta para testeo de red" }
+              - column: { name: costo, valueNumeric: 25.0 }
+              - column: { name: stock, valueNumeric: 8 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-009" }
+              - column: { name: nombre, value: "Fibra óptica" }
+              - column: { name: descripcion, value: "Cable de fibra óptica" }
+              - column: { name: costo, valueNumeric: 70.0 }
+              - column: { name: stock, valueNumeric: 60 }
+        - insert:
+            tableName: material
+            columns:
+              - column: { name: codigo, value: "MAT-010" }
+              - column: { name: nombre, value: "Caja de herramientas" }
+              - column: { name: descripcion, value: "Kit básico para soporte técnico" }
+              - column: { name: costo, valueNumeric: 45.0 }
+              - column: { name: stock, valueNumeric: 12 }
+        - insert:
+            tableName: material_orden
+            columns:
+              - column: { name: orden_id, valueNumeric: 1 }
+              - column: { name: material_id, valueNumeric: 1 }
+              - column: { name: cantidad, valueNumeric: 5 }
+              - column: { name: fecha_uso, valueDate: "2025-06-12T10:00:00" }
+              - column: { name: comentario, value: "Uso inicial de material" }
+        - insert:
+            tableName: material_orden
+            columns:
+              - column: { name: orden_id, valueNumeric: 2 }
+              - column: { name: material_id, valueNumeric: 2 }
+              - column: { name: cantidad, valueNumeric: 2 }
+              - column: { name: fecha_uso, valueDate: "2025-06-13T09:30:00" }
+              - column: { name: comentario, value: "Material de reemplazo" }
+        - insert:
+            tableName: material_orden
+            columns:
+              - column: { name: orden_id, valueNumeric: 3 }
+              - column: { name: material_id, valueNumeric: 3 }
+              - column: { name: cantidad, valueNumeric: 1 }
+              - column: { name: fecha_uso, valueDate: "2025-06-14T11:00:00" }
+              - column: { name: comentario, value: "Material extra" }
+        - insert:
+            tableName: material_orden
+            columns:
+              - column: { name: orden_id, valueNumeric: 4 }
+              - column: { name: material_id, valueNumeric: 4 }
+              - column: { name: cantidad, valueNumeric: 3 }
+              - column: { name: fecha_uso, valueDate: "2025-06-15T14:30:00" }
+              - column: { name: comentario, value: "Material para actualización" }
+        - insert:
+            tableName: material_orden
+            columns:
+              - column: { name: orden_id, valueNumeric: 5 }
+              - column: { name: material_id, valueNumeric: 5 }
+              - column: { name: cantidad, valueNumeric: 4 }
+              - column: { name: fecha_uso, valueDate: "2025-06-16T16:45:00" }
+              - column: { name: comentario, value: "Material para instalación" }

@@ -180,6 +180,7 @@ MS_ORDENES_DB_USER=usuario
 MS_ORDENES_DB_PASSWORD=contraseña
 MS_USUARIOS_URL=http://ms-usuarios:8080
 KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+SWAGGER_PRODUCTION_SERVER_URL=https://ejemplo.com
 ```
 
 ### Dependencias Principales
@@ -243,3 +244,19 @@ curl -X POST http://localhost:8081/api/ordenes \
     "descripcion": "Falla en router principal"
   }'
 ```
+
+### Ejecución local
+
+Una vez creado el archivo .env ejecutar el siguiente comando:
+
+```bash
+export $(cat .env | xargs)
+```
+
+Luego ejecute la instalacion de paquetes y corra el proyecto.
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+---

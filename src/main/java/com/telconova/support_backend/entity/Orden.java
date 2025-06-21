@@ -46,7 +46,7 @@ public class Orden {
     private TipoEstado estado;
 
     @Column(name = "usuario_id")
-    private Long usuario_id;
+    private Long usuarioId;
 
     // Constructor vacío requerido por JPA
     public Orden() {
@@ -139,5 +139,13 @@ public class Orden {
 
     public void setEstado(TipoEstado estado) {
         this.estado = estado;
+    }
+    
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }
