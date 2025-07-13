@@ -37,6 +37,10 @@ spring:
       locations: classpath:graphql/
     websocket:
       path: /graphql
+    cors:
+      allowed-origins: "*"
+      allowed-methods: GET,POST,OPTIONS
+      allowed-headers: "*"
 
 server:
   port: ${PORT:8080}
