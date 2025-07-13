@@ -68,15 +68,15 @@ public class SwaggerConfig {
                         .license(new License()
                                 .name(licenseName)
                                 .url(licenseUrl))
-                )
-                .servers(List.of(
-                        new Server()
-                                .url(productionServerUrl)
-                                .description("Servidor Producción"),
-                        new Server()
-                                .url(stagingServerUrl)
-                                .description("Servidor Staging")
-                ));
+                );
+                //.servers(List.of(
+                //        new Server()
+                //                .url(productionServerUrl)
+                //                .description("Servidor Producción"),
+                //        new Server()
+                //                .url(stagingServerUrl)
+                //                .description("Servidor Staging")
+                //));
                 /* 
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
