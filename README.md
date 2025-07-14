@@ -260,3 +260,22 @@ mvn clean install
 mvn spring-boot:run
 ```
 ---
+
+#### Docker en devcontainer
+
+Construye la imagen de docker:
+
+```bash
+docker build -t telconova/ms-workorder:latest .
+```
+
+Corre el contenedor con tus variables de entorno:
+```bash
+docker run -d --name ms-workorder   --network=telconova-supportsuite-workorder-service_devcontainer_devcontainer-network   -p 8080:8080   --env-file .env   telconova/ms-workorder:latest
+```
+
+En caso de problemas algunos comandos utiles son:
+```bash
+docker logs ms-tracking
+docker network ls
+```

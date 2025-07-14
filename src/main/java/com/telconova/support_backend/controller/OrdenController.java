@@ -1,4 +1,5 @@
 package com.telconova.support_backend.controller;
+
 import com.telconova.support_backend.entity.Orden;
 import com.telconova.support_backend.service.OrdenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class OrdenController {
     }
 
     @QueryMapping
-    public List<Orden> filtrarOrdenes(@Argument String estado, @Argument Long clienteId, @Argument String fechaInicio, @Argument String fechaCierre, @Argument Long usuarioId) {
+    public List<Orden> filtrarOrdenes(@Argument String estado, @Argument Long clienteId,
+            @Argument String fechaInicio, @Argument String fechaCierre, @Argument Long usuarioId) {
         return ordenService.filtrarOrdenes(estado, clienteId, fechaInicio, fechaCierre, usuarioId);
     }
 
@@ -33,7 +35,7 @@ public class OrdenController {
     public Orden cambiarEstadoOrden(@Argument Long id, @Argument String estado) {
         return ordenService.cambiarEstadoOrdenOrThrow(id, estado);
     }
-    
+
     @QueryMapping
     public List<Orden> obtenerOrdenesPorUsuarioId(@Argument Long usuario_id) {
         return ordenService.obtenerOrdenesPorUsuarioId(usuario_id);

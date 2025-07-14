@@ -1,15 +1,11 @@
 package com.telconova.support_backend.service;
 
 import com.telconova.support_backend.entity.Orden;
-import com.telconova.support_backend.entity.TipoEstado;
-import com.telconova.support_backend.entity.TipoOrden;
-import com.telconova.support_backend.entity.Cliente;
 import com.telconova.support_backend.repository.OrdenRepository;
 import com.telconova.support_backend.repository.TipoEstadoRepository;
-import com.telconova.support_backend.repository.TipoOrdenRepository;
-import com.telconova.support_backend.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.telconova.support_backend.entity.TipoEstado;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +20,6 @@ public class OrdenService {
     @Autowired
     private TipoEstadoRepository tipoEstadoRepository;
 
-    @Autowired
-    private TipoOrdenRepository tipoOrdenRepository;
-
-    @Autowired
-    private ClienteRepository clienteRepository;
-
     public List<Orden> listarOrdenes() {
         return ordenRepository.findAll();
     }
@@ -43,15 +33,16 @@ public class OrdenService {
     }
 
     public Orden cambiarEstadoOrdenOrThrow(Long id, String nuevoEstado) {
-    Orden orden = ordenRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
-    if (orden.getEstado() != null && "Finalizada".equalsIgnoreCase(orden.getEstado().getNombre())) {
-        throw new RuntimeException("No se puede modificar una orden finalizada");
-    }
-    TipoEstado tipoEstado = tipoEstadoRepository.findByNombre(nuevoEstado)
-        .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
-    orden.setEstado(tipoEstado);
-    return ordenRepository.save(orden);
+        Orden orden = ordenRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+        if (orden.getEstado() != null
+                && "Finalizada".equalsIgnoreCase(orden.getEstado().getNombre())) {
+            throw new RuntimeException("No se puede modificar una orden finalizada");
+        }
+        TipoEstado tipoEstado = tipoEstadoRepository.findByNombre(nuevoEstado)
+                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
+        orden.setEstado(tipoEstado);
+        return ordenRepository.save(orden);
     }
 
     public boolean eliminarOrden(Long id) {
@@ -76,44 +67,45 @@ public class OrdenService {
         StringBuilder sb = new StringBuilder();
         sb.append("id,codigo,descripcion,estado,cliente,tipo\n");
         for (Orden o : ordenes) {
-            sb.append(o.getId()).append(",")
-              .append(o.getCodigo()).append(",")
-              .append(o.getDescripcion()).append(",")
-              .append(o.getEstado() != null ? o.getEstado().getNombre() : "").append(",")
-              .append(o.getCliente() != null ? o.getCliente().getNombre() : "").append(",")
-              .append(o.getTipo() != null ? o.getTipo().getNombre() : "").append("\n");
+            sb.append(o.getId()).append(",").append(o.getCodigo()).append(",")
+                    .append(o.getDescripcion()).append(",")
+                    .append(o.getEstado() != null ? o.getEstado().getNombre() : "").append(",")
+                    .append(o.getCliente() != null ? o.getCliente().getNombre() : "").append(",")
+                    .append(o.getTipo() != null ? o.getTipo().getNombre() : "").append("\n");
         }
         return sb.toString();
     }
 
-    public List<Orden> filtrarOrdenes(String estado, Long clienteId, String fechaInicio, String fechaCierre, Long usuarioId) {
+    public List<Orden> filtrarOrdenes(String estado, Long clienteId, String fechaInicio,
+            String fechaCierre, Long usuarioId) {
         List<Orden> ordenes = ordenRepository.findAll();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         if (estado != null) {
-            ordenes = ordenes.stream()
-                .filter(o -> o.getEstado() != null && estado.equalsIgnoreCase(o.getEstado().getNombre()))
-                .toList();
+            ordenes = ordenes.stream().filter(o -> o.getEstado() != null
+                    && estado.equalsIgnoreCase(o.getEstado().getNombre())).toList();
         }
         if (clienteId != null) {
             ordenes = ordenes.stream()
-                .filter(o -> o.getCliente() != null && clienteId.equals(o.getCliente().getId()))
-                .toList();
+                    .filter(o -> o.getCliente() != null && clienteId.equals(o.getCliente().getId()))
+                    .toList();
         }
         if (fechaInicio != null) {
             ordenes = ordenes.stream()
-                .filter(o -> o.getFechaInicio() != null && o.getFechaInicio().format(formatter).startsWith(fechaInicio))
-                .toList();
+                    .filter(o -> o.getFechaInicio() != null
+                            && o.getFechaInicio().format(formatter).startsWith(fechaInicio))
+                    .toList();
         }
         if (fechaCierre != null) {
             ordenes = ordenes.stream()
-                .filter(o -> o.getFechaCierre() != null && o.getFechaCierre().format(formatter).startsWith(fechaCierre))
-                .toList();
+                    .filter(o -> o.getFechaCierre() != null
+                            && o.getFechaCierre().format(formatter).startsWith(fechaCierre))
+                    .toList();
         }
         if (usuarioId != null) {
             ordenes = ordenes.stream()
-                .filter(o -> o.getUsuarioId() != null && usuarioId.equals(o.getUsuarioId()))
-                .toList();
+                    .filter(o -> o.getUsuarioId() != null && usuarioId.equals(o.getUsuarioId()))
+                    .toList();
         }
         return ordenes;
     }
