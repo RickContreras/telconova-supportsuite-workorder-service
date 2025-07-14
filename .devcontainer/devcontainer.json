@@ -32,7 +32,7 @@
                         "password": "root1"
                     }
                 ],
-                "java.jdt.ls.java.home": "/docker-java-home",
+                "java.jdt.ls.java.home": "/usr/local/openjdk-21",
                 "java.configuration.updateBuildConfiguration": "automatic",
                 "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
                 "java.format.settings.profile": "GoogleStyle",
